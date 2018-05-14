@@ -24,17 +24,17 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/common/hexutil"
+	"github.com/echochain/echo-core/common/math"
+	"github.com/echochain/echo-core/consensus/ethash"
+	"github.com/echochain/echo-core/core"
+	"github.com/echochain/echo-core/core/state"
+	"github.com/echochain/echo-core/core/types"
+	"github.com/echochain/echo-core/core/vm"
+	"github.com/echochain/echo-core/ethdb"
+	"github.com/echochain/echo-core/params"
+	"github.com/echochain/echo-core/rlp"
 )
 
 // A BlockTest checks handling of entire blocks.

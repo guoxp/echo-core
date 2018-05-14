@@ -30,9 +30,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/core"
+	"github.com/echochain/echo-core/log"
 	"golang.org/x/crypto/ssh/terminal"
 )
 

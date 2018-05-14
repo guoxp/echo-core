@@ -25,30 +25,30 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/consensus"
-	"github.com/ethereum/go-ethereum/consensus/clique"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/bloombits"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/eth/downloader"
-	"github.com/ethereum/go-ethereum/eth/filters"
-	"github.com/ethereum/go-ethereum/eth/gasprice"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/miner"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/echochain/echo-core/accounts"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/common/hexutil"
+	"github.com/echochain/echo-core/consensus"
+	"github.com/echochain/echo-core/consensus/clique"
+	"github.com/echochain/echo-core/consensus/ethash"
+	"github.com/echochain/echo-core/core"
+	"github.com/echochain/echo-core/core/bloombits"
+	"github.com/echochain/echo-core/core/rawdb"
+	"github.com/echochain/echo-core/core/types"
+	"github.com/echochain/echo-core/core/vm"
+	"github.com/echochain/echo-core/eth/downloader"
+	"github.com/echochain/echo-core/eth/filters"
+	"github.com/echochain/echo-core/eth/gasprice"
+	"github.com/echochain/echo-core/ethdb"
+	"github.com/echochain/echo-core/event"
+	"github.com/echochain/echo-core/internal/ethapi"
+	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/miner"
+	"github.com/echochain/echo-core/node"
+	"github.com/echochain/echo-core/p2p"
+	"github.com/echochain/echo-core/params"
+	"github.com/echochain/echo-core/rlp"
+	"github.com/echochain/echo-core/rpc"
 )
 
 type LesServer interface {
@@ -184,7 +184,7 @@ func makeExtraData(extra []byte) []byte {
 		// create default extradata
 		extra, _ = rlp.EncodeToBytes([]interface{}{
 			uint(params.VersionMajor<<16 | params.VersionMinor<<8 | params.VersionPatch),
-			"geth",
+			"gecho",
 			runtime.Version(),
 			runtime.GOOS,
 		})

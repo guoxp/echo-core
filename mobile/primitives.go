@@ -16,7 +16,7 @@
 
 // Contains various wrappers for primitive types.
 
-package geth
+package gecho
 
 import (
 	"errors"

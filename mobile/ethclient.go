@@ -16,13 +16,13 @@
 
 // Contains a wrapper for the Ethereum client.
 
-package geth
+package gecho
 
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/echochain/echo-core/core/types"
+	"github.com/echochain/echo-core/ethclient"
 )
 
 // EthereumClient provides access to the Ethereum APIs.

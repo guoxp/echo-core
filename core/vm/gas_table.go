@@ -17,9 +17,9 @@
 package vm
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/common/math"
+	"github.com/echochain/echo-core/params"
 )
 
 // memoryGasCosts calculates the quadratic gas for memory expansion. It does so
@@ -130,6 +130,7 @@ func gasSStore(gt params.GasTable, evm *EVM, contract *Contract, stack *Stack, m
 	} else if val != (common.Hash{}) && y.Sign() == 0 {
 		// non 0 => 0
 		evm.StateDB.AddRefund(params.SstoreRefundGas)
+
 		return params.SstoreClearGas, nil
 	} else {
 		// non 0 => non 0 (or 0 => 0)

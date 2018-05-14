@@ -22,16 +22,16 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/bitutil"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/common/bitutil"
+	"github.com/echochain/echo-core/core"
+	"github.com/echochain/echo-core/core/rawdb"
+	"github.com/echochain/echo-core/core/types"
+	"github.com/echochain/echo-core/ethdb"
+	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/params"
+	"github.com/echochain/echo-core/rlp"
+	"github.com/echochain/echo-core/trie"
 )
 
 const (

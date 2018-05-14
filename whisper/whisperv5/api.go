@@ -24,12 +24,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/discover"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/common/hexutil"
+	"github.com/echochain/echo-core/crypto"
+	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/p2p/discover"
+	"github.com/echochain/echo-core/rpc"
 )
 
 var (
@@ -252,7 +252,8 @@ func (api *PublicWhisperAPI) Post(ctx context.Context, req NewMessage) (bool, er
 
 	// Set asymmetric key that is used to encrypt the message
 	if pubKeyGiven {
-		if params.Dst, err = crypto.UnmarshalPubkey(req.PublicKey); err != nil {
+		params.Dst = crypto.ToECDSAPub(req.PublicKey)
+		if !ValidatePublicKey(params.Dst) {
 			return false, ErrInvalidPublicKey
 		}
 	}
@@ -328,7 +329,8 @@ func (api *PublicWhisperAPI) Messages(ctx context.Context, crit Criteria) (*rpc.
 	}
 
 	if len(crit.Sig) > 0 {
-		if filter.Src, err = crypto.UnmarshalPubkey(crit.Sig); err != nil {
+		filter.Src = crypto.ToECDSAPub(crit.Sig)
+		if !ValidatePublicKey(filter.Src) {
 			return nil, ErrInvalidSigningPubKey
 		}
 	}
@@ -511,7 +513,8 @@ func (api *PublicWhisperAPI) NewMessageFilter(req Criteria) (string, error) {
 	}
 
 	if len(req.Sig) > 0 {
-		if src, err = crypto.UnmarshalPubkey(req.Sig); err != nil {
+		src = crypto.ToECDSAPub(req.Sig)
+		if !ValidatePublicKey(src) {
 			return "", ErrInvalidSigningPubKey
 		}
 	}

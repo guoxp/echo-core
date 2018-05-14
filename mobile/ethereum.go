@@ -16,13 +16,13 @@
 
 // Contains all the wrappers from the go-ethereum root package.
 
-package geth
+package gecho
 
 import (
 	"errors"
 
-	ethereum "github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
+	ethereum "github.com/echochain/echo-core"
+	"github.com/echochain/echo-core/common"
 )
 
 // Subscription represents an event subscription where events are

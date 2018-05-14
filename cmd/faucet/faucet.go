@@ -41,23 +41,23 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/accounts/keystore"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/eth/downloader"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/ethstats"
-	"github.com/ethereum/go-ethereum/les"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/discover"
-	"github.com/ethereum/go-ethereum/p2p/discv5"
-	"github.com/ethereum/go-ethereum/p2p/nat"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/echochain/echo-core/accounts"
+	"github.com/echochain/echo-core/accounts/keystore"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/core"
+	"github.com/echochain/echo-core/core/types"
+	"github.com/echochain/echo-core/eth"
+	"github.com/echochain/echo-core/eth/downloader"
+	"github.com/echochain/echo-core/ethclient"
+	"github.com/echochain/echo-core/ethstats"
+	"github.com/echochain/echo-core/les"
+	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/node"
+	"github.com/echochain/echo-core/p2p"
+	"github.com/echochain/echo-core/p2p/discover"
+	"github.com/echochain/echo-core/p2p/discv5"
+	"github.com/echochain/echo-core/p2p/nat"
+	"github.com/echochain/echo-core/params"
 	"golang.org/x/net/websocket"
 )
 
@@ -215,7 +215,7 @@ type faucet struct {
 func newFaucet(genesis *core.Genesis, port int, enodes []*discv5.Node, network uint64, stats string, ks *keystore.KeyStore, index []byte) (*faucet, error) {
 	// Assemble the raw devp2p protocol stack
 	stack, err := node.New(&node.Config{
-		Name:    "geth",
+		Name:    "gecho",
 		Version: params.Version,
 		DataDir: filepath.Join(os.Getenv("HOME"), ".faucet"),
 		P2P: p2p.Config{
@@ -450,7 +450,7 @@ func (f *faucet) apiHandler(conn *websocket.Conn) {
 		case *noauthFlag:
 			username, avatar, address, err = authNoAuth(msg.URL)
 		default:
-			err = errors.New("Something funky happened, please open an issue at https://github.com/ethereum/go-ethereum/issues")
+			err = errors.New("Something funky happened, please open an issue at https://github.com/echochain/echo-core/issues")
 		}
 		if err != nil {
 			if err = sendError(conn, err); err != nil {

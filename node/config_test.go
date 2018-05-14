@@ -24,8 +24,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/echochain/echo-core/crypto"
+	"github.com/echochain/echo-core/p2p"
 )
 
 // Tests that datadirs can be successfully created, be them manually configured
@@ -73,15 +73,15 @@ func TestIPCPathResolution(t *testing.T) {
 	}{
 		{"", "", false, ""},
 		{"data", "", false, ""},
-		{"", "geth.ipc", false, filepath.Join(os.TempDir(), "geth.ipc")},
-		{"data", "geth.ipc", false, "data/geth.ipc"},
-		{"data", "./geth.ipc", false, "./geth.ipc"},
-		{"data", "/geth.ipc", false, "/geth.ipc"},
+		{"", "gecho.ipc", false, filepath.Join(os.TempDir(), "gecho.ipc")},
+		{"data", "gecho.ipc", false, "data/gecho.ipc"},
+		{"data", "./gecho.ipc", false, "./gecho.ipc"},
+		{"data", "/gecho.ipc", false, "/gecho.ipc"},
 		{"", "", true, ``},
 		{"data", "", true, ``},
-		{"", "geth.ipc", true, `\\.\pipe\geth.ipc`},
-		{"data", "geth.ipc", true, `\\.\pipe\geth.ipc`},
-		{"data", `\\.\pipe\geth.ipc`, true, `\\.\pipe\geth.ipc`},
+		{"", "gecho.ipc", true, `\\.\pipe\gecho.ipc`},
+		{"data", "gecho.ipc", true, `\\.\pipe\gecho.ipc`},
+		{"data", `\\.\pipe\gecho.ipc`, true, `\\.\pipe\gecho.ipc`},
 	}
 	for i, test := range tests {
 		// Only run when platform/test match

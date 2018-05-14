@@ -20,10 +20,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/ethdb"
+	"github.com/echochain/echo-core/log"
 )
 
 var (

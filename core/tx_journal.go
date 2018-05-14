@@ -21,10 +21,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/core/types"
+	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/rlp"
 )
 
 // errNoActiveJournal is returned if a transaction is attempted to be inserted

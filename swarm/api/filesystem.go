@@ -26,9 +26,9 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/swarm/storage"
+	"github.com/echochain/echo-core/common"
+	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/swarm/storage"
 )
 
 const maxParallelFiles = 5
