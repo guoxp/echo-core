@@ -41,7 +41,7 @@ ADD genesis.json /genesis.json
 {{end}}
 RUN \
   echo 'gecho --cache 512 init /genesis.json' > gecho.sh && \{{if .Unlock}}
-	echo 'mkdir -p /root/.ethereum/keystore/ && cp /signer.json /root/.ethereum/keystore/' >> gecho.sh && \{{end}}
+	echo 'mkdir -p /root/.echochain/keystore/ && cp /signer.json /root/.echochain/keystore/' >> gecho.sh && \{{end}}
 	echo $'gecho --networkid {{.NetworkID}} --cache 512 --port {{.Port}} --maxpeers {{.Peers}} {{.LightFlag}} --ethstats \'{{.Ethstats}}\' {{if .Bootnodes}}--bootnodes {{.Bootnodes}}{{end}} {{if .Etherbase}}--etherbase {{.Etherbase}} --mine --minerthreads 1{{end}} {{if .Unlock}}--unlock 0 --password /signer.pass --mine{{end}} --targetgaslimit {{.GasTarget}} --gasprice {{.GasPrice}}' >> gecho.sh
 
 ENTRYPOINT ["/bin/sh", "gecho.sh"]
@@ -59,7 +59,7 @@ services:
       - "{{.Port}}:{{.Port}}"
       - "{{.Port}}:{{.Port}}/udp"
     volumes:
-      - {{.Datadir}}:/root/.ethereum{{if .Ethashdir}}
+      - {{.Datadir}}:/root/.echochain{{if .Ethashdir}}
       - {{.Ethashdir}}:/root/.ethash{{end}}
     environment:
       - PORT={{.Port}}/tcp
@@ -246,7 +246,7 @@ func checkNode(client *sshClient, network string, boot bool) (*nodeInfos, error)
 	// Assemble and return the useful infos
 	stats := &nodeInfos{
 		genesis:    genesis,
-		datadir:    infos.volumes["/root/.ethereum"],
+		datadir:    infos.volumes["/root/.echochain"],
 		ethashdir:  infos.volumes["/root/.ethash"],
 		port:       port,
 		peersTotal: totalPeers,
