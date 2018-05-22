@@ -219,13 +219,13 @@ func CreateConsensusEngine(ctx *node.ServiceContext, config *ethash.Config, chai
 	// Otherwise assume proof-of-work
 	switch {
 	case config.PowMode == ethash.ModeFake:
-		log.Warn("Ethash used in fake mode")
+		log.Warn("Echash used in fake mode")
 		return ethash.NewFaker()
 	case config.PowMode == ethash.ModeTest:
-		log.Warn("Ethash used in test mode")
+		log.Warn("Echash used in test mode")
 		return ethash.NewTester()
 	case config.PowMode == ethash.ModeShared:
-		log.Warn("Ethash used in shared mode")
+		log.Warn("Echash used in shared mode")
 		return ethash.NewShared()
 	default:
 		engine := ethash.New(ethash.Config{
