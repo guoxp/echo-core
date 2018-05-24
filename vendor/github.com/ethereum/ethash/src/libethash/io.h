@@ -80,7 +80,7 @@ enum ethash_io_rc {
  *                           data directory. If it does not exist it's created.
  * @param[in] seedhash       The seedhash of the current block number, used in the
  *                           naming of the file as can be seen from the spec at:
- *                           https://github.com/ethereum/wiki/wiki/Ethash-DAG
+ *                           https://github.com/echochain/echo-core/wiki/wiki/Ethash-DAG
  * @param[out] output_file   If there was no failure then this will point to an open
  *                           file descriptor. User is responsible for closing it.
  *                           In the case of memo match then the file is open on read
@@ -175,7 +175,7 @@ char* ethash_io_create_filename(
 /**
  * Gets the default directory name for the DAG depending on the system
  *
- * The spec defining this directory is here: https://github.com/ethereum/wiki/wiki/Ethash-DAG
+ * The spec defining this directory is here: https://github.com/echochain/echo-core/wiki/wiki/Ethash-DAG
  *
  * @param[out] strbuf          A string buffer of sufficient size to keep the
  *                             null termninated string of the directory name

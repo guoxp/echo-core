@@ -46,9 +46,9 @@ func makeWizard(network string) *wizard {
 // setting up a new or managing an existing Ethereum private network.
 func (w *wizard) run() {
 	fmt.Println("+-----------------------------------------------------------+")
-	fmt.Println("| Welcome to puppeth, your Ethereum private network manager |")
+	fmt.Println("| Welcome to puppeth, your E private network manager |")
 	fmt.Println("|                                                           |")
-	fmt.Println("| This tool lets you create a new Ethereum network down to  |")
+	fmt.Println("| This tool lets you create a new EchoChain network down to  |")
 	fmt.Println("| the genesis block, bootnodes, miners and ethstats servers |")
 	fmt.Println("| without the hassle that it would normally entail.         |")
 	fmt.Println("|                                                           |")

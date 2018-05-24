@@ -36,10 +36,10 @@ The echo-core project comes with several wrappers/executables found in the `cmd`
 |:----------:|-------------|
 | **`gecho`** | Our main EchoChain CLI client. It is the entry point into the EchoChain network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the EchoChain network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. `gecho --help` and the [CLI Wiki page](https://github.com/echochain/echo-core/wiki/Command-Line-Options) for command line options. |
 | `abigen` | Source code generator to convert EchoChain contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [EchoChain contract ABIs](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/echochain/echo-core/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki page for details. |
-| `bootnode` | Stripped down version of our EchoChain client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. |
-| `evm` | Developer utility version of the EVM (EchoChain Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow isolated, fine-grained debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug`). |
-| `gethrpctest` | Developer utility tool to support our [ethereum/rpc-test](https://github.com/ethereum/rpc-tests) test suite which validates baseline conformity to the [EchoChain JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/ethereum/rpc-tests/blob/master/README.md) for details. |
-| `rlpdump` | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://github.com/ethereum/wiki/wiki/RLP)) dumps (data encoding used by the EchoChain protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
+| `bootnode` | Stripped down version of our EchoChain client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. 
+| `evm` | Developer utility version of the EVM (EchoChain Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow isolated, fine-grained debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug`). 
+| `gethrpctest` | Developer utility tool to support our [echochain/rpc-test](https://github.com/echochain/rpc-tests) test suite which validates baseline conformity to the [EchoChain JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/echochain/echo-core/rpc-tedsts/blob/master/README.md) for details. |
+| `rlpdump` | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://github.com/echochain/wiki/wiki/RLP)) dumps (data encoding used by the EchoChain protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
 | `swarm`    | swarm daemon and tools. This is the entrypoint for the swarm network. `swarm --help` for command line options and subcommands. See https://swarm-guide.readthedocs.io for swarm documentation. |
 | `puppeth`    | a CLI wizard that aids in creating a new EchoChain network. |
 
@@ -67,7 +67,7 @@ This command will:
    download more data in exchange for avoiding processing the entire history of the EchoChain network,
    which is very CPU intensive.
  * Start up Gecho's built-in interactive [JavaScript console](https://github.com/echochain/echo-core/wiki/JavaScript-Console),
-   (via the trailing `console` subcommand) through which you can invoke all official [`web3` methods](https://github.com/ethereum/wiki/wiki/JavaScript-API)
+   (via the trailing `console` subcommand) through which you can invoke all official [`web3` methods](https://github.com/echochain/wiki/wiki/JavaScript-API)
    as well as Gecho's own [management APIs](https://github.com/echochain/echo-core/wiki/Management-APIs).
    This too is optional and if you leave it out you can always attach to an already running Gecho instance
    with `gecho attach`.
@@ -88,8 +88,8 @@ testnet too. Please see above for their explanations if you've skipped to here.
 
 Specifying the `--testnet` flag however will reconfigure your Gecho instance a bit:
 
- * Instead of using the default data directory (`~/.ethereum` on Linux for example), Gecho will nest
-   itself one level deeper into a `testnet` subfolder (`~/.ethereum/testnet` on Linux). Note, on OSX
+ * Instead of using the default data directory (`~/.echochain` on Linux for example), gecho will nest
+   itself one level deeper into a `testnet` subfolder (`~/.echochain/testnet` on Linux). Note, on OSX
    and Linux this also means that attaching to a running testnet node requires the use of a custom
    endpoint since `gecho attach` will try to attach to a production node endpoint by default. E.g.
    `gecho attach <datadir>/testnet/gecho.ipc`. Windows users are not affected by this.
@@ -103,7 +103,7 @@ separate the two networks and will not make any accounts available between them.
 
 ### Full node on the Rinkeby test network
 
-The above test network is a cross client one based on the ethash proof-of-work consensus algorithm. As such, it has certain extra overhead and is more susceptible to reorganization attacks due to the network's low difficulty / security. Go EchoChain also supports connecting to a proof-of-authority based test network called [*Rinkeby*](https://www.rinkeby.io) (operated by members of the community). This network is lighter, more secure, but is only supported by go-ethereum.
+The above test network is a cross client one based on the echash proof-of-work consensus algorithm. As such, it has certain extra overhead and is more susceptible to reorganization attacks due to the network's low difficulty / security. Go EchoChain also supports connecting to a proof-of-authority based test network called [*Rinkeby*](https://www.rinkeby.io) (operated by members of the community). This network is lighter, more secure, but is only supported by go-echochain.
 
 ```
 $ gecho --rinkeby console
@@ -130,9 +130,9 @@ $ gecho --your-favourite-flags dumpconfig
 One of the quickest ways to get EchoChain up and running on your machine is by using Docker:
 
 ```
-docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
+docker run -d --name echochain-node -v /Users/alice/echochain:/root \
            -p 8545:8545 -p 30303:30303 \
-           ethereum/client-go
+           echochain/client-go
 ```
 
 This will start gecho in fast-sync mode with a DB memory allowance of 1GB just as the above command does.  It will also create a persistent volume in your home directory for saving your blockchain as well as map the default ports. There is also an `alpine` tag available for a slim version of the image.
@@ -282,7 +282,7 @@ limit blocks converge to (`--targetgaslimit`) and the price transactions are acc
 Thank you for considering to help out with the source code! We welcome contributions from
 anyone on the internet, and are grateful for even the smallest of fixes!
 
-If you'd like to contribute to go-ethereum, please fork, fix, commit and send a pull request
+If you'd like to contribute to echochain, please fork, fix, commit and send a pull request
 for the maintainers to review and merge into the main code base. If you wish to submit more
 complex changes though, please check up with the core devs first on [our gitter channel](https://gitter.im/echochain/echo-core)
 to ensure those changes are in line with the general philosophy of the project and/or get some
@@ -302,10 +302,10 @@ for more details on configuring your environment, managing project dependencies 
 
 ## License
 
-The go-ethereum library (i.e. all code outside of the `cmd` directory) is licensed under the
+The echochain library (i.e. all code outside of the `cmd` directory) is licensed under the
 [GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html), also
 included in our repository in the `COPYING.LESSER` file.
 
-The go-ethereum binaries (i.e. all code inside of the `cmd` directory) is licensed under the
+The echochain binaries (i.e. all code inside of the `cmd` directory) is licensed under the
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), also included
 in our repository in the `COPYING` file.
