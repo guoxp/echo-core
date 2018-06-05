@@ -26,7 +26,7 @@ import (
 // Genesis hashes to enforce below configs on.
 var (
 	MainnetGenesisHash = common.HexToHash("0x8129a128bfe1ec9cd8775ae0606fe5b2e1676e1b306d0c4ff324e9871cdb859e") // Mainnet genesis hash to enforce below configs on
-	TestnetGenesisHash = common.HexToHash("0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d") // Testnet genesis hash to enforce below configs on
+	TestnetGenesisHash = common.HexToHash("0xf0b0bff629c34cdafdd9c49080b2e09259a57ed315a72f79d396ec9276ca8e69") // Testnet genesis hash to enforce below configs on
 )
 
 var (
@@ -50,17 +50,20 @@ var (
 
 	// TestnetChainConfig contains the chain parameters to run a node on the Ropsten test network.
 	TestnetChainConfig = &ChainConfig{
-		ChainID:             big.NewInt(3),
+		ChainId:             big.NewInt(379),
 		HomesteadBlock:      big.NewInt(0),
 		DAOForkBlock:        nil,
 		DAOForkSupport:      true,
 		EIP150Block:         big.NewInt(0),
-		EIP150Hash:          common.HexToHash("0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d"),
-		EIP155Block:         big.NewInt(10),
-		EIP158Block:         big.NewInt(10),
-		ByzantiumBlock:      big.NewInt(1700000),
+		EIP150Hash:          TestnetGenesisHash,
+		EIP155Block:         big.NewInt(3),
+		EIP158Block:         big.NewInt(3),
+		ByzantiumBlock:      big.NewInt(4),
 		ConstantinopleBlock: nil,
-		Ethash:              new(EthashConfig),
+		Clique: &CliqueConfig{
+			Period: 5,
+			Epoch:  3000,
+		},
 	}
 
 	// RinkebyChainConfig contains the chain parameters to run a node on the Rinkeby test network.
