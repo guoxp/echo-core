@@ -12,5 +12,5 @@ FROM alpine:latest
 RUN apk add --no-cache ca-certificates
 COPY --from=builder echochain/echo-core/build/bin/gecho /usr/local/bin/
 
-EXPOSE 8545 8546 30303 30303/udp
+EXPOSE 18545 18546 30303 30303/udp
 ENTRYPOINT ["gecho"]
