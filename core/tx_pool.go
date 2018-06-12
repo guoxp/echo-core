@@ -619,7 +619,7 @@ func (pool *TxPool) add(tx *types.Transaction, local bool) (bool, error) {
 	if uint64(len(pool.all)) >= pool.config.GlobalSlots+pool.config.GlobalQueue {
 		// If the new transaction is underpriced, don't accept it
 		if !local && pool.priced.Underpriced(tx, pool.locals) {
-			log.Trace("Discarding underpriced transaction", "hash", hash, "price", tx.GasPrice())
+			log.Info("Discarding underpriced transaction", "hash", hash, "price", tx.GasPrice(), "len(pool.all) is: ", len(pool.all))
 			underpricedTxCounter.Inc(1)
 			return false, ErrUnderpriced
 		}
