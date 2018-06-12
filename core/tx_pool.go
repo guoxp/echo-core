@@ -923,7 +923,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 		// Drop all transactions that are deemed too old (low nonce)
 		for _, tx := range list.Forward(pool.currentState.GetNonce(addr)) {
 			hash := tx.Hash()
-			log.Trace("Removed old queued transaction", "hash", hash)
+			log.Info("Removed old queued transaction", "hash", hash)
 			delete(pool.all, hash)
 			pool.priced.Removed()
 		}
@@ -931,7 +931,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 		drops, _ := list.Filter(pool.currentState.GetBalance(addr), pool.currentMaxGas)
 		for _, tx := range drops {
 			hash := tx.Hash()
-			log.Trace("Removed unpayable queued transaction", "hash", hash)
+			log.Info("Removed unpayable queued transaction", "hash", hash)
 			delete(pool.all, hash)
 			pool.priced.Removed()
 			queuedNofundsCounter.Inc(1)
@@ -939,7 +939,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 		// Gather all executable transactions and promote them
 		for _, tx := range list.Ready(pool.pendingState.GetNonce(addr)) {
 			hash := tx.Hash()
-			log.Trace("Promoting queued transaction", "hash", hash)
+			log.Info("Promoting queued transaction", "hash", hash)
 			pool.promoteTx(addr, hash, tx)
 		}
 		// Drop all transactions over the allowed limit
@@ -949,7 +949,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 				delete(pool.all, hash)
 				pool.priced.Removed()
 				queuedRateLimitCounter.Inc(1)
-				log.Trace("Removed cap-exceeding queued transaction", "hash", hash)
+				log.Info("Removed cap-exceeding queued transaction", "hash", hash)
 			}
 		}
 		// Delete the entire queue entry if it became empty.
@@ -998,7 +998,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 							if nonce := tx.Nonce(); pool.pendingState.GetNonce(offenders[i]) > nonce {
 								pool.pendingState.SetNonce(offenders[i], nonce)
 							}
-							log.Trace("Removed fairness-exceeding pending transaction", "hash", hash)
+							log.Info("Removed fairness-exceeding pending transaction", "hash", hash)
 						}
 						pending--
 					}
@@ -1020,7 +1020,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 						if nonce := tx.Nonce(); pool.pendingState.GetNonce(addr) > nonce {
 							pool.pendingState.SetNonce(addr, nonce)
 						}
-						log.Trace("Removed fairness-exceeding pending transaction", "hash", hash)
+						log.Info("Removed fairness-exceeding pending transaction", "hash", hash)
 					}
 					pending--
 				}
