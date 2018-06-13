@@ -805,8 +805,7 @@ func (pool *TxPool) addTxs(txs []*types.Transaction, local bool) []error {
 	return pool.addTxsLocked(txs, local)
 }
 
-// addTxsLocked attempts to queue a batch of transactions if they are valid,
-// whilst assuming the transaction pool lock is already held.
+c
 func (pool *TxPool) addTxsLocked(txs []*types.Transaction, local bool) []error {
 	// Add the batch of transaction, tracking the accepted ones
 	dirty := make(map[common.Address]struct{})
@@ -999,7 +998,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 							if nonce := tx.Nonce(); pool.pendingState.GetNonce(offenders[i]) > nonce {
 								pool.pendingState.SetNonce(offenders[i], nonce)
 							}
-							log.Info("Removed fairness-exceeding pending transaction", "hash", hash)
+							log.Info("11111111Removed fairness-exceeding pending transaction", "hash", hash)
 						}
 						pending--
 					}
@@ -1021,7 +1020,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 						if nonce := tx.Nonce(); pool.pendingState.GetNonce(addr) > nonce {
 							pool.pendingState.SetNonce(addr, nonce)
 						}
-						log.Info("Removed fairness-exceeding pending transaction", "hash", hash)
+						log.Info("22222222Removed fairness-exceeding pending transaction", "hash", hash)
 					}
 					pending--
 				}
