@@ -615,9 +615,9 @@ func (pool *TxPool) add(tx *types.Transaction, local bool) (bool, error) {
 		invalidTxCounter.Inc(1)
 		return false, err
 	}
-	log.Info("I want to know the length of pool", "len(pool.all) is: ", len(pool.all))
 	// If the transaction pool is full, discard underpriced transactions
 	if uint64(len(pool.all)) >= pool.config.GlobalSlots+pool.config.GlobalQueue {
+		log.Info("I want to know the length of pool", "len(pool.all) is: ", len(pool.all))
 		// If the new transaction is underpriced, don't accept it
 		if !local && pool.priced.Underpriced(tx, pool.locals) {
 			log.Info("Discarding underpriced transaction", "hash", hash, "price", tx.GasPrice())
@@ -627,7 +627,7 @@ func (pool *TxPool) add(tx *types.Transaction, local bool) (bool, error) {
 		// New transaction is better than our worse ones, make room for it
 		drop := pool.priced.Discard(len(pool.all)-int(pool.config.GlobalSlots+pool.config.GlobalQueue-1), pool.locals)
 		for _, tx := range drop {
-			log.Trace("Discarding freshly underpriced transaction", "hash", tx.Hash(), "price", tx.GasPrice())
+			log.Info("Discarding freshly underpriced transaction", "hash", tx.Hash(), "price", tx.GasPrice())
 			underpricedTxCounter.Inc(1)
 			pool.removeTx(tx.Hash(), false)
 		}
@@ -999,7 +999,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 							if nonce := tx.Nonce(); pool.pendingState.GetNonce(offenders[i]) > nonce {
 								pool.pendingState.SetNonce(offenders[i], nonce)
 							}
-							log.Info("Removed fairness-exceeding pending transaction", "hash", hash)
+							log.Info("11111111111Removed fairness-exceeding pending transaction", "hash", hash)
 						}
 						pending--
 					}
@@ -1021,7 +1021,7 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) {
 						if nonce := tx.Nonce(); pool.pendingState.GetNonce(addr) > nonce {
 							pool.pendingState.SetNonce(addr, nonce)
 						}
-						log.Info("Removed fairness-exceeding pending transaction", "hash", hash)
+						log.Info("222222222222Removed fairness-exceeding pending transaction", "hash", hash)
 					}
 					pending--
 				}
