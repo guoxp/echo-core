@@ -29,7 +29,7 @@ type Stack struct {
 }
 
 func newstack() *Stack {
-	return &Stack{data: make([]*big.Int, 0, 102400)}
+	return &Stack{data: make([]*big.Int, 0, 1024)}
 }
 
 func (st *Stack) Data() []*big.Int {
