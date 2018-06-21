@@ -128,15 +128,17 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, cfg)
 	}
 
-	for {
-		newReceipt := <-channelData
+	select {
+	case newReceipt := <-channelData:
 		receipts = append(receipts, newReceipt.receipt)
 		allLogs = append(allLogs, newReceipt.receipt.Logs...)
 		*usedGas += newReceipt.usedGas
 		j++
+		log.Info("=============shx test==========: ", j)
 		if j == i {
 			break
 		}
+
 	}
 	// Finalize the block, applying any consensus engine specific extras (e.g. block rewards)
 	p.engine.Finalize(p.bc, header, statedb, block.Transactions(), block.Uncles(), receipts)
