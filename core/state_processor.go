@@ -135,7 +135,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		*usedGas += newReceipt.usedGas
 		j++
 		log.Info("=============shx test==========: ", j)
-		if j == i {
+		if j == i+1 {
 			break
 		}
 
