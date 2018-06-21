@@ -86,7 +86,8 @@ func (pm *ProtocolManager) txsyncLoop() {
 			delete(pending, s.p.ID())
 		}
 		// Send the pack in the background.
-		s.p.Log().Info("Sending batch of transactions", "count", len(pack.txs), "bytes", size)
+		//s.p.Log().Trace("Sending batch of transactions", "count", len(pack.txs), "bytes", size)
+		log.Info("Sending batch of transactions", "count", len(pack.txs), "bytes", size)
 		sending = true
 		go func() { done <- pack.p.SendTransactions(pack.txs) }()
 	}
