@@ -24,7 +24,6 @@ import (
 	"github.com/echochain/echo-core/core/types"
 	"github.com/echochain/echo-core/core/vm"
 	"github.com/echochain/echo-core/crypto"
-	"github.com/echochain/echo-core/log"
 	"github.com/echochain/echo-core/params"
 )
 
@@ -69,7 +68,6 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	// Iterate over and process the individual transactions
 	for i, tx := range block.Transactions() {
 		statedb.Prepare(tx.Hash(), block.Hash(), i)
-		log.Info("the Process function: ", "count = %d", i)
 		receipt, _, err := ApplyTransaction(p.config, p.bc, nil, gp, statedb, header, tx, usedGas, cfg)
 		if err != nil {
 			return nil, nil, 0, err
