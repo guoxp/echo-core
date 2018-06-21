@@ -24,7 +24,6 @@ import (
 	"github.com/echochain/echo-core/core/types"
 	"github.com/echochain/echo-core/core/vm"
 	"github.com/echochain/echo-core/crypto"
-	"github.com/echochain/echo-core/log"
 	"github.com/echochain/echo-core/params"
 )
 
@@ -54,7 +53,7 @@ func NewStateProcessor(config *params.ChainConfig, bc *BlockChain, engine consen
 // Process returns the receipts and logs accumulated during the process and
 // returns the amount of gas that was used in the process. If any of the
 // transactions failed to execute due to insufficient gas it will return an error.
-/*
+
 func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg vm.Config) (types.Receipts, []*types.Log, uint64, error) {
 	var (
 		receipts types.Receipts
@@ -82,7 +81,8 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 
 	return receipts, allLogs, *usedGas, nil
 }
-*/
+
+/*
 type syncTransaction struct {
 	usedGas uint64
 	receipt *types.Receipt
@@ -148,7 +148,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 
 	return receipts, allLogs, *usedGas, nil
 }
-
+*/
 // ApplyTransaction attempts to apply a transaction to the given state database
 // and uses the input parameters for its environment. It returns the receipt
 // for the transaction, gas used and an error if the transaction failed,
