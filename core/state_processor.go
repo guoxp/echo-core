@@ -125,8 +125,10 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	}
 	// Iterate over and process the individual transactions
 	for i, tx = range block.Transactions() {
+		log.Info("=============shx test++++++ i: ", i)
 		go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, cfg)
 	}
+	log.Info("=============shx test1111111111111")
 
 	select {
 	case newReceipt := <-channelData:
@@ -140,6 +142,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		}
 
 	}
+	log.Info("=============shx test22222222222222222222222222")
 	// Finalize the block, applying any consensus engine specific extras (e.g. block rewards)
 	p.engine.Finalize(p.bc, header, statedb, block.Transactions(), block.Uncles(), receipts)
 
