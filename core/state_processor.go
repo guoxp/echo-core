@@ -24,6 +24,7 @@ import (
 	"github.com/echochain/echo-core/core/types"
 	"github.com/echochain/echo-core/core/vm"
 	"github.com/echochain/echo-core/crypto"
+	"github.com/echochain/echo-core/log"
 	"github.com/echochain/echo-core/params"
 )
 
@@ -53,6 +54,7 @@ func NewStateProcessor(config *params.ChainConfig, bc *BlockChain, engine consen
 // Process returns the receipts and logs accumulated during the process and
 // returns the amount of gas that was used in the process. If any of the
 // transactions failed to execute due to insufficient gas it will return an error.
+/*
 func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg vm.Config) (types.Receipts, []*types.Log, uint64, error) {
 	var (
 		receipts types.Receipts
@@ -74,6 +76,67 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		}
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, receipt.Logs...)
+	}
+	// Finalize the block, applying any consensus engine specific extras (e.g. block rewards)
+	p.engine.Finalize(p.bc, header, statedb, block.Transactions(), block.Uncles(), receipts)
+
+	return receipts, allLogs, *usedGas, nil
+}
+*/
+type syncTransaction struct {
+	usedGas uint64
+	receipt *types.Receipt
+}
+
+func echoApplyTransaction(syncData chan syncTransaction, tx *types.Transaction, block *types.Block, ti int, p *StateProcessor, statedb *state.StateDB, header *types.Header, gp *GasPool, cfg vm.Config) {
+	var usedGasAndReceipt syncTransaction
+	statedb.Prepare(tx.Hash(), block.Hash(), ti)
+	receipt, _, err := ApplyTransaction(p.config, p.bc, nil, gp, statedb, header, tx, &usedGasAndReceipt.usedGas, cfg)
+	if err != nil {
+		log.Error("echoApplyTransaction has error: ", err)
+		return
+	}
+	usedGasAndReceipt.receipt = receipt
+	syncData <- usedGasAndReceipt
+}
+
+// Process processes the state changes according to the Ethereum rules by running
+// the transaction messages using the statedb and applying any rewards to both
+// the processor (coinbase) and any included uncles.
+//
+// Process returns the receipts and logs accumulated during the process and
+// returns the amount of gas that was used in the process. If any of the
+// transactions failed to execute due to insufficient gas it will return an error.
+func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg vm.Config) (types.Receipts, []*types.Log, uint64, error) {
+	var (
+		receipts types.Receipts
+		usedGas  = new(uint64)
+		header   = block.Header()
+		allLogs  []*types.Log
+		gp       = new(GasPool).AddGas(block.GasLimit())
+	)
+	var i, j int
+	var tx *types.Transaction
+	channelData := make(chan syncTransaction)
+
+	// Mutate the the block and state according to any hard-fork specs
+	if p.config.DAOForkSupport && p.config.DAOForkBlock != nil && p.config.DAOForkBlock.Cmp(block.Number()) == 0 {
+		misc.ApplyDAOHardFork(statedb)
+	}
+	// Iterate over and process the individual transactions
+	for i, tx = range block.Transactions() {
+		go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, cfg)
+	}
+
+	for {
+		newReceipt := <-channelData
+		receipts = append(receipts, newReceipt.receipt)
+		allLogs = append(allLogs, newReceipt.receipt.Logs...)
+		*usedGas += newReceipt.usedGas
+		j++
+		if j == i {
+			break
+		}
 	}
 	// Finalize the block, applying any consensus engine specific extras (e.g. block rewards)
 	p.engine.Finalize(p.bc, header, statedb, block.Transactions(), block.Uncles(), receipts)
