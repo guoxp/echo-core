@@ -94,7 +94,7 @@ func echoApplyTransaction(syncData chan syncTransaction, tx *types.Transaction, 
 	statedb.Prepare(tx.Hash(), block.Hash(), ti)
 	receipt, _, err := shxApplyTransaction(p.config, p.bc, nil, gp, statedb, header, tx, &usedGasAndReceipt.usedGas, cfg)
 	if err != nil {
-		log.Error("echoApplyTransaction has error: ", err)
+		log.Error("echoApplyTransaction has error, ", "err is: ", err)
 		return
 	}
 	usedGasAndReceipt.receipt = receipt
