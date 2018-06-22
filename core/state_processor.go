@@ -139,7 +139,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 			allLogs = append(allLogs, newReceipt.receipt.Logs...)
 			*usedGas += newReceipt.usedGas
 			j++
-			log.Info("=============shx test==========: ", "j = ", j)
+			log.Info("=============shx test==========: ", "j ", j, "usedGas:", *usedGas)
 			if j == i+1 {
 				break
 			}
