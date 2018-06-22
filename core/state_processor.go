@@ -174,8 +174,8 @@ func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *com
 		return nil, 0, err
 	}
 	// Update the state with pending changes
-	var root []byte
 	mutex.Lock()
+	var root []byte
 	if config.IsByzantium(header.Number) {
 		statedb.Finalise(true)
 	} else {
