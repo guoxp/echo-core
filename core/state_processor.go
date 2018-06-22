@@ -17,6 +17,8 @@
 package core
 
 import (
+	"sync"
+
 	"github.com/echochain/echo-core/common"
 	"github.com/echochain/echo-core/consensus"
 	"github.com/echochain/echo-core/consensus/misc"
@@ -154,6 +156,8 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 /*
 my try
 */
+var mutex sync.Mutex
+
 func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *common.Address, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *uint64, cfg *vm.Config) (*types.Receipt, uint64, error) {
 	msg, err := tx.AsMessage(types.MakeSigner(config, header.Number))
 	if err != nil {
@@ -171,11 +175,13 @@ func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *com
 	}
 	// Update the state with pending changes
 	var root []byte
+	mutex.Lock()
 	if config.IsByzantium(header.Number) {
 		statedb.Finalise(true)
 	} else {
 		root = statedb.IntermediateRoot(config.IsEIP158(header.Number)).Bytes()
 	}
+	mutex.Unlock()
 	*usedGas += gas
 
 	// Create a new receipt for the transaction, storing the intermediate root and gas used by the tx
