@@ -159,6 +159,7 @@ my try
 var mutex sync.Mutex
 
 func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *common.Address, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *uint64, cfg *vm.Config) (*types.Receipt, uint64, error) {
+	mutex.Lock()
 	msg, err := tx.AsMessage(types.MakeSigner(config, header.Number))
 	if err != nil {
 		return nil, 0, err
@@ -174,7 +175,6 @@ func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *com
 		return nil, 0, err
 	}
 	// Update the state with pending changes
-	mutex.Lock()
 	var root []byte
 	if config.IsByzantium(header.Number) {
 		statedb.Finalise(true)
