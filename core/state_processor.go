@@ -17,8 +17,6 @@
 package core
 
 import (
-	"sync"
-
 	"github.com/echochain/echo-core/common"
 	"github.com/echochain/echo-core/consensus"
 	"github.com/echochain/echo-core/consensus/misc"
@@ -26,7 +24,6 @@ import (
 	"github.com/echochain/echo-core/core/types"
 	"github.com/echochain/echo-core/core/vm"
 	"github.com/echochain/echo-core/crypto"
-	"github.com/echochain/echo-core/log"
 	"github.com/echochain/echo-core/params"
 )
 
@@ -56,7 +53,7 @@ func NewStateProcessor(config *params.ChainConfig, bc *BlockChain, engine consen
 // Process returns the receipts and logs accumulated during the process and
 // returns the amount of gas that was used in the process. If any of the
 // transactions failed to execute due to insufficient gas it will return an error.
-/*
+
 func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg vm.Config) (types.Receipts, []*types.Log, uint64, error) {
 	var (
 		receipts types.Receipts
@@ -84,8 +81,8 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 
 	return receipts, allLogs, *usedGas, nil
 }
-*/
 
+/*
 type syncTransaction struct {
 	usedGas uint64
 	receipt *types.Receipt
@@ -145,7 +142,6 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 			if j == i+1 {
 				break
 			}
-
 		}
 		log.Info("=============shx test22222222222222222222222222")
 	}
@@ -155,9 +151,6 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	return receipts, allLogs, *usedGas, nil
 }
 
-/*
-my try
-*/
 var mutex sync.Mutex
 
 func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *common.Address, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *uint64, cfg *vm.Config) (*types.Receipt, uint64, error) {
@@ -201,6 +194,7 @@ func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *com
 
 	return receipt, gas, err
 }
+*/
 
 // ApplyTransaction attempts to apply a transaction to the given state database
 // and uses the input parameters for its environment. It returns the receipt
