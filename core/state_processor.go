@@ -133,8 +133,8 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 			go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, &echocfg)
 		}
 		log.Info("=============shx test1111111111111")
-		select {
-		case newReceipt := <-channelData:
+		for {
+			newReceipt := <-channelData
 			receipts = append(receipts, newReceipt.receipt)
 			allLogs = append(allLogs, newReceipt.receipt.Logs...)
 			*usedGas += newReceipt.usedGas
