@@ -89,16 +89,16 @@ type syncTransaction struct {
 	receipt *types.Receipt
 }
 
-func echoApplyTransaction(syncData chan *syncTransaction, tx *types.Transaction, block *types.Block, ti int, p *StateProcessor, statedb *state.StateDB, header *types.Header, gp *GasPool, cfg vm.Config) {
+func echoApplyTransaction(syncData chan syncTransaction, tx *types.Transaction, block *types.Block, ti int, p *StateProcessor, statedb *state.StateDB, header *types.Header, gp *GasPool, cfg *vm.Config) {
 	var usedGasAndReceipt syncTransaction
 	statedb.Prepare(tx.Hash(), block.Hash(), ti)
-	receipt, _, err := ApplyTransaction(p.config, p.bc, nil, gp, statedb, header, tx, &usedGasAndReceipt.usedGas, cfg)
+	receipt, _, err := shxApplyTransaction(p.config, p.bc, nil, gp, statedb, header, tx, &usedGasAndReceipt.usedGas, cfg)
 	if err != nil {
 		log.Error("echoApplyTransaction has error: ", err)
 		return
 	}
 	usedGasAndReceipt.receipt = receipt
-	syncData <- &usedGasAndReceipt
+	syncData <- usedGasAndReceipt
 }
 
 // Process processes the state changes according to the Ethereum rules by running
@@ -118,8 +118,8 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	)
 	var i, j int
 	var tx *types.Transaction
-	channelData := make(chan *syncTransaction)
-
+	channelData := make(chan syncTransaction)
+	echocfg := cfg
 	// Mutate the the block and state according to any hard-fork specs
 	if p.config.DAOForkSupport && p.config.DAOForkBlock != nil && p.config.DAOForkBlock.Cmp(block.Number()) == 0 {
 		misc.ApplyDAOHardFork(statedb)
@@ -128,10 +128,9 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	if len(block.Transactions()) > 0 {
 		for i, tx = range block.Transactions() {
 			log.Info("=============shx test++++++ ", "i = ", i)
-			go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, cfg)
+			go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, &echocfg)
 		}
 		log.Info("=============shx test1111111111111")
-
 		select {
 		case newReceipt := <-channelData:
 			receipts = append(receipts, newReceipt.receipt)
@@ -150,6 +149,49 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	p.engine.Finalize(p.bc, header, statedb, block.Transactions(), block.Uncles(), receipts)
 
 	return receipts, allLogs, *usedGas, nil
+}
+
+/*
+my try
+*/
+func shxApplyTransaction(config *params.ChainConfig, bc *BlockChain, author *common.Address, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *uint64, cfg *vm.Config) (*types.Receipt, uint64, error) {
+	msg, err := tx.AsMessage(types.MakeSigner(config, header.Number))
+	if err != nil {
+		return nil, 0, err
+	}
+	// Create a new context to be used in the EVM environment
+	context := NewEVMContext(msg, header, bc, author)
+	// Create a new environment which holds all relevant information
+	// about the transaction and calling mechanisms.
+	vmenv := vm.NewEVM(context, statedb, config, *cfg)
+	// Apply the transaction to the current state (included in the env)
+	_, gas, failed, err := ApplyMessage(vmenv, msg, gp)
+	if err != nil {
+		return nil, 0, err
+	}
+	// Update the state with pending changes
+	var root []byte
+	if config.IsByzantium(header.Number) {
+		statedb.Finalise(true)
+	} else {
+		root = statedb.IntermediateRoot(config.IsEIP158(header.Number)).Bytes()
+	}
+	*usedGas += gas
+
+	// Create a new receipt for the transaction, storing the intermediate root and gas used by the tx
+	// based on the eip phase, we're passing wether the root touch-delete accounts.
+	receipt := types.NewReceipt(root, failed, *usedGas)
+	receipt.TxHash = tx.Hash()
+	receipt.GasUsed = gas
+	// if the transaction created a contract, store the creation address in the receipt.
+	if msg.To() == nil {
+		receipt.ContractAddress = crypto.CreateAddress(vmenv.Context.Origin, tx.Nonce())
+	}
+	// Set the receipt logs and create a bloom for filtering
+	receipt.Logs = statedb.GetLogs(tx.Hash())
+	receipt.Bloom = types.CreateBloom(types.Receipts{receipt})
+
+	return receipt, gas, err
 }
 
 // ApplyTransaction attempts to apply a transaction to the given state database
