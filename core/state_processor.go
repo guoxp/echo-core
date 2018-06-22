@@ -101,6 +101,7 @@ func echoApplyTransaction(syncData chan syncTransaction, tx *types.Transaction, 
 	}
 	usedGasAndReceipt.receipt = receipt
 	syncData <- usedGasAndReceipt
+	log.Info("echoApplyTransaction the test")
 }
 
 // Process processes the state changes according to the Ethereum rules by running
@@ -121,6 +122,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	var i, j int
 	var tx *types.Transaction
 	channelData := make(chan syncTransaction)
+	var newReceipt syncTransaction
 	echocfg := cfg
 	// Mutate the the block and state according to any hard-fork specs
 	if p.config.DAOForkSupport && p.config.DAOForkBlock != nil && p.config.DAOForkBlock.Cmp(block.Number()) == 0 {
@@ -134,7 +136,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		}
 		log.Info("=============shx test1111111111111")
 		for {
-			newReceipt := <-channelData
+			newReceipt = <-channelData
 			receipts = append(receipts, newReceipt.receipt)
 			allLogs = append(allLogs, newReceipt.receipt.Logs...)
 			*usedGas += newReceipt.usedGas
