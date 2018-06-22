@@ -89,7 +89,7 @@ type syncTransaction struct {
 	receipt *types.Receipt
 }
 
-func echoApplyTransaction(syncData chan syncTransaction, tx *types.Transaction, block *types.Block, ti int, p *StateProcessor, statedb *state.StateDB, header *types.Header, gp *GasPool, cfg vm.Config) {
+func echoApplyTransaction(syncData chan *syncTransaction, tx *types.Transaction, block *types.Block, ti int, p *StateProcessor, statedb *state.StateDB, header *types.Header, gp *GasPool, cfg vm.Config) {
 	var usedGasAndReceipt syncTransaction
 	statedb.Prepare(tx.Hash(), block.Hash(), ti)
 	receipt, _, err := ApplyTransaction(p.config, p.bc, nil, gp, statedb, header, tx, &usedGasAndReceipt.usedGas, cfg)
@@ -98,7 +98,7 @@ func echoApplyTransaction(syncData chan syncTransaction, tx *types.Transaction, 
 		return
 	}
 	usedGasAndReceipt.receipt = receipt
-	syncData <- usedGasAndReceipt
+	syncData <- &usedGasAndReceipt
 }
 
 // Process processes the state changes according to the Ethereum rules by running
@@ -118,7 +118,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	)
 	var i, j int
 	var tx *types.Transaction
-	channelData := make(chan syncTransaction)
+	channelData := make(chan *syncTransaction)
 
 	// Mutate the the block and state according to any hard-fork specs
 	if p.config.DAOForkSupport && p.config.DAOForkBlock != nil && p.config.DAOForkBlock.Cmp(block.Number()) == 0 {
@@ -127,7 +127,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 	// Iterate over and process the individual transactions
 	if len(block.Transactions()) > 0 {
 		for i, tx = range block.Transactions() {
-			log.Info("=============shx test++++++ i: ", i)
+			log.Info("=============shx test++++++ ", "i = ", i)
 			go echoApplyTransaction(channelData, tx, block, i, p, statedb, header, gp, cfg)
 		}
 		log.Info("=============shx test1111111111111")
@@ -138,7 +138,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 			allLogs = append(allLogs, newReceipt.receipt.Logs...)
 			*usedGas += newReceipt.usedGas
 			j++
-			log.Info("=============shx test==========: ", j)
+			log.Info("=============shx test==========: ", "j = ", j)
 			if j == i+1 {
 				break
 			}
