@@ -675,7 +675,7 @@ func doWindowsInstaller(cmdline []string) {
 	// first section contains the gecho binary, second section holds the dev tools.
 	templateData := map[string]interface{}{
 		"License":  "COPYING",
-		"Gecho":     gethTool,
+		"Gecho":    gethTool,
 		"DevTools": devTools,
 	}
 	build.Render("build/nsis.gecho.nsi", filepath.Join(*workdir, "gecho.nsi"), 0644, nil)
@@ -755,14 +755,18 @@ func doAndroidArchive(cmdline []string) {
 	os.Rename(archive, meta.Package+".aar")
 	if *signer != "" && *deploy != "" {
 		// Import the signing key into the local GPG instance
-		if b64key := os.Getenv(*signer); b64key != "" {
-			key, err := base64.StdEncoding.DecodeString(b64key)
-			if err != nil {
-				log.Fatalf("invalid base64 %s", *signer)
-			}
-			gpg := exec.Command("gpg", "--import")
-			gpg.Stdin = bytes.NewReader(key)
-			build.MustRun(gpg)
+		b64key := os.Getenv(*signer)
+		key, err := base64.StdEncoding.DecodeString(b64key)
+		if err != nil {
+			log.Fatalf("invalid base64 %s", *signer)
+		}
+		gpg := exec.Command("gpg", "--import")
+		gpg.Stdin = bytes.NewReader(key)
+		build.MustRun(gpg)
+
+		keyID, err := build.PGPKeyID(string(key))
+		if err != nil {
+			log.Fatal(err)
 		}
 		// Upload the artifacts to Sonatype and/or Maven Central
 		repo := *deploy + "/service/local/staging/deploy/maven2"

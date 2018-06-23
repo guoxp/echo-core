@@ -20,7 +20,6 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/echochain/echo-core/cmd/utils"
 	"github.com/echochain/echo-core/common"
 	"github.com/echochain/echo-core/crypto"
 	"github.com/echochain/echo-core/log"

@@ -22,7 +22,7 @@ import (
 	"errors"
 
 	"github.com/echochain/echo-core/common"
-	"github.com/echochain/echo-core/rlp
+	"github.com/echochain/echo-core/rlp"
 )
 
 // Iterator is a key-value trie iterator that traverses a Trie.

@@ -23,6 +23,7 @@ import (
 	"github.com/echochain/echo-core/common"
 	"github.com/echochain/echo-core/ethdb"
 	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/metrics"
 )
 
 var (

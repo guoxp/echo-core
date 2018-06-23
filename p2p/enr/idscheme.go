@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/echochain/echo-core/common/math"
+	"github.com/echochain/echo-core/crypto"
+	"github.com/echochain/echo-core/crypto/sha3"
+	"github.com/echochain/echo-core/rlp"
 )
 
 // Registry of known identity schemes.
