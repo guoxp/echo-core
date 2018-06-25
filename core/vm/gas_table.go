@@ -130,7 +130,6 @@ func gasSStore(gt params.GasTable, evm *EVM, contract *Contract, stack *Stack, m
 	} else if val != (common.Hash{}) && y.Sign() == 0 {
 		// non 0 => 0
 		evm.StateDB.AddRefund(params.SstoreRefundGas)
-
 		return params.SstoreClearGas, nil
 	} else {
 		// non 0 => non 0 (or 0 => 0)
