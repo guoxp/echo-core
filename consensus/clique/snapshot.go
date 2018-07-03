@@ -19,6 +19,7 @@ package clique
 import (
 	"bytes"
 	"encoding/json"
+	"math/rand"
 
 	"github.com/echochain/echo-core/common"
 	"github.com/echochain/echo-core/core/types"
@@ -303,7 +304,14 @@ func (s *Snapshot) signers() []common.Address {
 // inturn returns if a signer at a given block height is in-turn or not.
 func (s *Snapshot) inturn(number uint64, signer common.Address) bool {
 	signers, offset := s.signers(), 0
-	for offset < len(signers) && signers[offset] != signer {
+	rand.Seed(int64(number))
+	randNumList := rand.Perm(len(signers))
+	tmpSigners := make([]common.Address, 0, len(signers))
+	for i := 0; i < len(randNumList); i++ {
+		tmpSigners = append(tmpSigners, signers[randNumList[i]])
+	}
+
+	for offset < len(tmpSigners) && tmpSigners[offset] != signer {
 		offset++
 	}
 	return (number % uint64(len(signers))) == uint64(offset)
