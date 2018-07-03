@@ -19,6 +19,7 @@ package clique
 import (
 	"bytes"
 	"encoding/json"
+	"math/rand"
 
 	"github.com/echochain/echo-core/common"
 	"github.com/echochain/echo-core/core/types"
@@ -208,11 +209,11 @@ func (s *Snapshot) apply(headers []*types.Header) (*Snapshot, error) {
 		if _, ok := snap.Signers[signer]; !ok {
 			return nil, errUnauthorized
 		}
-		for _, recent := range snap.Recents {
+		/*	for _, recent := range snap.Recents {
 			if recent == signer {
 				return nil, errUnauthorized
 			}
-		}
+		}*/
 		snap.Recents[number] = signer
 
 		// Header authorized, discard any previous votes from the signer
@@ -302,9 +303,14 @@ func (s *Snapshot) signers() []common.Address {
 
 // inturn returns if a signer at a given block height is in-turn or not.
 func (s *Snapshot) inturn(number uint64, signer common.Address) bool {
+	/*	signers, offset := s.signers(), 0
+		for offset < len(signers) && signers[offset] != signer {
+			offset++
+		}
+		return (number % uint64(len(signers))) == uint64(offset)
+	*/
+	rand.Seed(int64(number))
 	signers, offset := s.signers(), 0
-	for offset < len(signers) && signers[offset] != signer {
-		offset++
-	}
-	return (number % uint64(len(signers))) == uint64(offset)
+	offset = rand.Intn(len(signers))
+	return signers[offset] == signer
 }
