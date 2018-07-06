@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/echochain/echo-core/log"
+	"github.com/echochain/echo-core/swarm/log"
 )
 
 /*
